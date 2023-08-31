@@ -1,28 +1,27 @@
-﻿using DiscordBot;
+﻿using DiscordBot.Common;
+using DiscordBot.Bots;
 using DiscordBot.Verification;
 using DiscordBot.Verification.Components;
+using DiscordBot.Verification.Instances;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 
-//var services = new ServiceCollection();
-//
-//services.AddSingleton(Config.Load("../../../Settings/Config.json"));
-//services.AddSingleton<Bot>();
-//
-//services.AddSingleton<IVerificator>(
-//    new VerificationList(new List<IVerificator>()
-//    {
-//
-//    }));
-//
-//var provider = services.BuildServiceProvider();
-//
-//var bot = provider.GetRequiredService<Bot>();
-//await bot.Run();
+var services = new ServiceCollection();
 
-Console.WriteLine(JsonConvert.SerializeObject(new Dictionary<char, int>() 
-{
-    { 'c', 1 },
-    { 'v', 1 },
-    { 'a', 1 },
-}, Formatting.Indented));
+services.AddSingleton(Config.Load("Configuration.json"));
+
+services.AddSingleton<Bot>();
+
+services.AddSingleton<IVerificator>(
+    new VerificationList(new List<IVerificator>()
+    {
+        new ForbiddenLettersVerificator("./Settings/ForbiddenLetters.json"),
+        new ForbiddenWordsVerificator("./Settings/ForbiddenWords.json"),
+    }
+));
+
+services.AddSingleton<IServiceCollection>(services);
+
+var provider = services.BuildServiceProvider();
+
+var bot = provider.GetRequiredService<Bot>();
+await bot.Run();

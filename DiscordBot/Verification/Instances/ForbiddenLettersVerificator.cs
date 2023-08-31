@@ -11,7 +11,18 @@ namespace DiscordBot.Verification.Instances
 
         public override int Verificate(string[] words)
         {
-            throw new NotImplementedException();
+            int value = 0;
+
+            foreach (var word in words)
+            {
+                foreach (var letter in Config.Keys)
+                {
+                    if (word.Contains(letter))
+                        value += Config[letter];
+                }
+            }
+
+            return value;
         }
     }
 }

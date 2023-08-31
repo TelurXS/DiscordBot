@@ -6,7 +6,7 @@ namespace DiscordBot.Verification.Components
         public VerificatorWithFileConfig(string path)
         {
             if (File.Exists(path) is false)
-                throw new ArgumentException($"Config file for {GetType().FullName} is not exist.");
+                throw new ArgumentException($"Config file for {GetType().FullName} is not exist in path {path}.");
 
             string data = File.ReadAllText(path);
 
