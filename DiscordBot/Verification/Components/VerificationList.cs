@@ -1,18 +1,35 @@
-﻿namespace DiscordBot.Verification.Components
+﻿using System.Collections;
+
+namespace DiscordBot.Verification.Components
 {
-    public sealed class VerificationList : Verificator
+    public sealed class VerificationList : Verificator, IEnumerable
     {
         public VerificationList(IEnumerable<IVerificator> verificators)
         {
             Verificators = verificators;
         }
 
-        public IEnumerable<IVerificator> Verificators { get; }
+        public VerificationList()
+        {
+            Verificators = new List<IVerificator>();
+        }
+
+        public IEnumerable<IVerificator> Verificators { get; private set; }
 
         public override int Verificate(string[] words)
         {
             return Verificators.Sum(verificator =>
-                verificator.Verificate(words)); ;
+                verificator.Verificate(words));
+        }
+
+        public void Add(IVerificator verificator)
+        {
+            Verificators = Verificators.Append(verificator);
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return Verificators.GetEnumerator();
         }
     }
 }

@@ -7,19 +7,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 var services = new ServiceCollection();
 
-services.AddSingleton(Config.Load("Configuration.json"));
+var config = Config.Load("Configuration.json");
 
+services.AddSingleton(config);
 services.AddSingleton<Bot>();
 
 services.AddSingleton<IVerificator>(
-    new VerificationList(new List<IVerificator>()
+    new VerificationList()
     {
         new ForbiddenLettersVerificator("./Settings/ForbiddenLetters.json"),
         new ForbiddenWordsVerificator("./Settings/ForbiddenWords.json"),
+        new ForbiddenLanguageVerificator("./Settings/ForbiddenLanguages.json", config.DetectLanguageKey)
     }
-));
-
-services.AddSingleton<IServiceCollection>(services);
+);
 
 var provider = services.BuildServiceProvider();
 

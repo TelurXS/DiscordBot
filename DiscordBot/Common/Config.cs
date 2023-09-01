@@ -4,13 +4,11 @@ namespace DiscordBot.Common
 {
     public sealed class Config
     {
-        public Config(string token)
-        {
-            Token = token;
-        }
+        [JsonProperty(nameof(DiscordToken))]
+        public string DiscordToken { get; private set; }
 
-        [JsonProperty("token")]
-        public string Token { get; private set; }
+        [JsonProperty(nameof(DetectLanguageKey))]
+        public string DetectLanguageKey { get; private set; }
 
         public void Save(string path)
         {

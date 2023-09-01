@@ -16,7 +16,7 @@ namespace DiscordBot.Bots
 
             var configuration = new DiscordConfiguration()
             {
-                Token = config.Token,
+                Token = config.DiscordToken,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.All,
                 MinimumLogLevel = LogLevel.Debug,

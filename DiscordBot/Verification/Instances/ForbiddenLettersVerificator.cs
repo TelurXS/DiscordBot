@@ -9,17 +9,17 @@ namespace DiscordBot.Verification.Instances
         {
         }
 
-        public override int Verificate(string[] words)
+        public override int Verificate(string[] words) 
+            => Verificate(string.Join(' ', words));
+
+        public override int Verificate(string text)
         {
             int value = 0;
 
-            foreach (var word in words)
+            foreach (var letter in Config.Keys)
             {
-                foreach (var letter in Config.Keys)
-                {
-                    if (word.Contains(letter))
-                        value += Config[letter];
-                }
+                if (text.Contains(letter))
+                    value += Config[letter];
             }
 
             return value;
