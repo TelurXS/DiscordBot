@@ -1,13 +1,19 @@
-﻿using DiscordBot.Verification.Components;
+﻿using DiscordBot.Common;
+using DiscordBot.Inforamtors;
+using DiscordBot.Verification.Components;
 
 namespace DiscordBot.Verification.Instances
 {
     public class ForbiddenWordsVerificator 
         : VerificatorWithJsonFileConfig<Dictionary<string, int>>
     {
-        public ForbiddenWordsVerificator(string path) : base(path)
+        public ForbiddenWordsVerificator(Config config, IInformator informator)
+            : base(config.Verificators.ForbiddenWordsConfigPath)
         {
+            Informator = informator;
         }
+
+        public IInformator Informator { get; }
 
         public override int Verificate(string[] words)
         {
@@ -15,8 +21,13 @@ namespace DiscordBot.Verification.Instances
 
             foreach (var word in words) 
             {
-                if(Config.ContainsKey(word))
-                    value += Config[word];
+                var lower = word.ToLower();
+
+                if (Config.ContainsKey(lower)) 
+                {
+                    value += Config[lower];
+                    Informator.AppendLine($"Words verification: Containing word {word} - {Config[lower]}");
+                }      
             }
 
             return value;

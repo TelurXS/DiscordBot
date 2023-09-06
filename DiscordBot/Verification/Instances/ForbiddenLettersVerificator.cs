@@ -1,13 +1,19 @@
-﻿using DiscordBot.Verification.Components;
+﻿using DiscordBot.Common;
+using DiscordBot.Inforamtors;
+using DiscordBot.Verification.Components;
 
 namespace DiscordBot.Verification.Instances
 {
     public sealed class ForbiddenLettersVerificator : 
         VerificatorWithJsonFileConfig<Dictionary<char, int>>
     {
-        public ForbiddenLettersVerificator(string path) : base(path)
+        public ForbiddenLettersVerificator(Config config, IInformator informator)
+            : base(config.Verificators.ForbiddenLettersConfigPath)
         {
+            Informator = informator;
         }
+
+        public IInformator Informator { get; }
 
         public override int Verificate(string[] words) 
             => Verificate(string.Join(' ', words));
@@ -19,7 +25,10 @@ namespace DiscordBot.Verification.Instances
             foreach (var letter in Config.Keys)
             {
                 if (text.Contains(letter))
+                {
                     value += Config[letter];
+                    Informator.AppendLine($"Letter verification: Contains {letter} - {Config[letter]}");
+                }                   
             }
 
             return value;

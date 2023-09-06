@@ -1,5 +1,6 @@
 ﻿using DiscordBot.Bots.Commands;
 using DiscordBot.Common;
+using DiscordBot.Inforamtors;
 using DiscordBot.Verification;
 using DSharpPlus;
 using DSharpPlus.SlashCommands;
@@ -10,13 +11,13 @@ namespace DiscordBot.Bots
 {
     public sealed class Bot
     {
-        public Bot(Config config, IVerificator verificator)
+        public Bot(Config config, IVerificator verificator, IInformator informator)
         {
             Verificator = verificator;
 
             var configuration = new DiscordConfiguration()
             {
-                Token = config.DiscordToken,
+                Token = config.Discord.Token,
                 TokenType = TokenType.Bot,
                 Intents = DiscordIntents.All,
                 MinimumLogLevel = LogLevel.Debug,
@@ -29,6 +30,7 @@ namespace DiscordBot.Bots
             {
                 Services = new ServiceCollection()
                     .AddSingleton(verificator)
+                    .AddSingleton(informator)
                     .BuildServiceProvider()
             };
 

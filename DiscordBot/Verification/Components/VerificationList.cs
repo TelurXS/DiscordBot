@@ -2,7 +2,7 @@
 
 namespace DiscordBot.Verification.Components
 {
-    public sealed class VerificationList : Verificator, IEnumerable
+    public sealed class VerificationList : Verificator, IEnumerable<IVerificator>
     {
         public VerificationList(IEnumerable<IVerificator> verificators)
         {
@@ -27,9 +27,10 @@ namespace DiscordBot.Verification.Components
             Verificators = Verificators.Append(verificator);
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return Verificators.GetEnumerator();
-        }
+        public IEnumerator<IVerificator> GetEnumerator()
+            => Verificators.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+            => GetEnumerator();
     }
 }
