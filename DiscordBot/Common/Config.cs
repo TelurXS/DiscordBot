@@ -51,5 +51,11 @@ namespace DiscordBot.Common
 
         [JsonProperty(nameof(WordsCountMultiplierConfigPath))]
         public string WordsCountMultiplierConfigPath { get; private set; }
+        
+        [JsonProperty(nameof(PriorityLanguage))]
+        public string PriorityLanguage { get; private set; }
+
+        [JsonProperty(nameof(EvaluationLimit))]
+        public int EvaluationLimit { get; private set; }
     }
 }

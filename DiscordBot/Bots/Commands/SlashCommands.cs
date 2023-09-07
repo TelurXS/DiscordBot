@@ -19,7 +19,7 @@ namespace DiscordBot.Bots.Commands
         {
             await ctx.CreateResponseAsync(
                 InteractionResponseType.ChannelMessageWithSource,
-                new DiscordInteractionResponseBuilder().WithContent($"Active!"));
+                new DiscordInteractionResponseBuilder().WithContent($"Pong!"));
         }
 
         [SlashCommand("verify", "Evaluate text")]

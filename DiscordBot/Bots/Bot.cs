@@ -14,6 +14,7 @@ namespace DiscordBot.Bots
         public Bot(Config config, IVerificator verificator, IInformator informator)
         {
             Verificator = verificator;
+            EvaluationLimit = config.Verificators.EvaluationLimit;
 
             var configuration = new DiscordConfiguration()
             {
@@ -37,12 +38,22 @@ namespace DiscordBot.Bots
             SlashExtension = Client.UseSlashCommands(commandsConfiguration);
             SlashExtension.RegisterCommands<SlashCommands>();
 
-            Client.MessageCreated += (client, args) => Task.CompletedTask;
+            Client.MessageCreated += async (client, args) =>
+            {
+                int value = Verificator.Verificate(args.Message.Content);
+
+                if (value >= EvaluationLimit)
+                {
+                    Console.WriteLine($"[{args.Message.Author.Username}]: ${args.Message.Content} - Deleted ({value})");
+                    await args.Message.DeleteAsync();
+                }
+            };
         }
 
         public IVerificator Verificator { get; }
         public DiscordClient Client { get; private set; }
         public SlashCommandsExtension SlashExtension { get; private set; }
+        public int EvaluationLimit { get; private set; }
 
         public async Task Run()
         {
